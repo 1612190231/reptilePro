@@ -25,7 +25,8 @@ def get_cloud(file):
     seg_list_exact = jieba.cut(string_data, cut_all=False)  # 精确模式分词
     object_list = []
     remove_words = [u'的', u'，', u'和', u'是', u'随着', u'对于', u'对', u'等', u'能', u'都', u'。', u' ', u'、', u'中', u'在', u'了',
-                    u'通常', u'如果', u'我', u'你', u'他', u'我们', u'你们', u'他们', u'它', u'它们', u'需要']  # 自定义去除词库
+                    u'通常', u'如果', u'我', u'你', u'他', u'我们', u'你们', u'他们', u'它', u'它们', u'需要', u'问题', u'没有',
+                    u'也', u'还']  # 自定义去除词库
 
     for word in seg_list_exact:  # 循环读出每个分词
         if word not in remove_words:  # 如果不在去除词库中
@@ -39,8 +40,8 @@ def get_cloud(file):
     # 词频展示
     mask = np.array(Image.open('cloud.jpg'))  # 定义词频背景
     wc = wordcloud.WordCloud(
-        font_path='悠哉字体.ttf',  # 设置字体格式
-        mask=mask,  # 设置背景图
+        font_path='汉仪大黑简.ttf',  # 设置字体格式
+        # mask=mask,  # 设置背景图
         max_words=150,  # 最多显示词数
         max_font_size=100  # 字体最大值
     )

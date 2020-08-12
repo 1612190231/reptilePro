@@ -18,7 +18,7 @@ def get_file(url, cookie):
     file_name = file_name + '.txt'
 
     with open(file_name, 'a', encoding='utf-8') as file:
-        for current_page in range(1, 2):
+        for current_page in range(1, 10):
             result = ReptileUtil.get_content(url, cookie, current_page)
             time.sleep(random.random()*3)
             # if len(result['rgv587_flag']) != 0:

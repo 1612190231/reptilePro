@@ -3,23 +3,38 @@ import CookieFollow
 import EntryUrlUtil
 import DictCloudUtil
 import ReptileAppUtil
+import FileApp
+import FileAppComment
 
 
 def main():
-    # url = EntryUrlUtil.get_input("淘宝评论Reptile", "示例：https://rate.tmall.com/list_detail_rate.htm?itemId=602659642364&sellerId=1917047079")
-    url = "https://edith.xiaohongshu.com/api/sns/v1/note/feed?note_id=5f29006200000000010063d6&page=1&num=5&fetch_mode=1&source=explore&ads_track_id=&fid=159722038710c6e963dbbad5fd42c77e0537628ea23b&device_fingerprint=20200613220359c4840fb1684bf704caef443a4283647201119f19be3f485e&device_fingerprint1=20200613220359c4840fb1684bf704caef443a4283647201119f19be3f485e&channel=HuaweiCloud&versionName=6.56.0&deviceId=3883749a-702f-3299-b9ca-4b5ce0645f15&platform=android&sid=session.1597220392759032153511&identifier_flag=4&t=1597221131&x_trace_page_current=explore_feed&lang=zh-Hans&uis=light HTTP/1.1"
-    # print(url)
+    # 淘宝comment
+    url = EntryUrlUtil.get_input("淘宝评论Reptile", "示例：https://rate.tmall.com/list_detail_rate.htm?itemId=602659642364&sellerId=1917047079")
+    # 小红书小程序search
+    # url = "https://www.xiaohongshu.com/fe_api/burdock/weixin/v2/search/notes?keyword=%E5%AE%8C%E7%BE%8E%E6%97%A5%E8%AE%B0&sortBy=hot_desc&page=6&pageSize=20&needGifCover=true"
+    # 小红书小程序comment
+    # url = "https://www.xiaohongshu.com/fe_api/burdock/weixin/v2/notes/5f11e1d2000000000101d951/comments?pageSize=10"
+    print(url)
     # self.url = MutualUtil.mutual_operation(root)
     # self.url = "https://rate.tmall.com/list_detail_rate.htm?itemId=602659642364&sellerId=1917047079"
     # self.url = "https://www.baidu.com"
 
-    # cookie = CookieFollow.get_cookie(url)
-    # file = FileUtil.get_file(url, cookie)
-    # # print(file)
+    # 淘宝
+    cookie = CookieFollow.get_cookie(url)
+    file = FileUtil.get_file(url, cookie)
+    print(file)
+    DictCloudUtil.get_cloud(file)
+
+    # 小红书小程序search
+    # result = ReptileAppUtil.get_content(url)
+    # print(result)
+    # FileApp.get_file(result)
+
+    # 小红书小程序comments
+    # result = ReptileAppUtil.get_content(url)
+    # file = FileAppComment.get_file(result)
     # DictCloudUtil.get_cloud(file)
 
-    result = ReptileAppUtil.get_content(url)
-    print(result)
     return 0
 
 

@@ -41,7 +41,7 @@ def get_content(url, cookie_dict, current_page):
     # 获取返回实体
     rubbish = callback + '('
     # print(rubbish)
-    temp = requests.get(url, params=params, headers=headers).text.rstrip(')')
+    temp = requests.get(url, params=params, headers=headers, verify=False).text.rstrip(')')
     # print(temp)
     res = run(temp, rubbish)
     # print(res)

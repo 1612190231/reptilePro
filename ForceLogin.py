@@ -7,10 +7,10 @@ from retrying import retry  # 设置重试次数用的
 
 async def main(username, pwd, url):  # 定义main协程函数，
     # 以下使用await 可以针对耗时的操作进行挂起
-    browser = await launch({'headless': False, 'args': ['--no-sandbox'], })  # 启动pyppeteer 属于内存中实现交互的模拟器
+    browser = await launch({'headless': False, 'args': ['--no-sandbox'], }, dumpio=True)  # 启动pyppeteer 属于内存中实现交互的模拟器
     page = await browser.newPage()  # 启动个新的浏览器页面
     await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36')
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0')
 
     await page.goto(url)  # 访问登录页面
     # 替换淘宝在检测浏览时采集的一些参数。

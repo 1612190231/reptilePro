@@ -4,15 +4,21 @@ import random
 from pyppeteer.launcher import launch  # 控制模拟浏览器用
 from retrying import retry  # 设置重试次数用的
 
+width, height = 1366, 768
 
 async def main(username, pwd, url):  # 定义main协程函数，
     # 以下使用await 可以针对耗时的操作进行挂起
-    browser = await launch({'headless': False, 'args': ['--no-sandbox'], })  # 启动pyppeteer 属于内存中实现交互的模拟器
-    page = await browser.newPage()  # 启动个新的浏览器页面
+    browser = await launch(devtools=True, userDataDir='./userdata',
+                           args=[f'--window-size={width},{height}'], dumpio=True)
+    page = await browser.newPage()
+    await page.setViewport({'width': width, 'height': height})
     await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36')
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0')
 
     await page.goto(url)  # 访问登录页面
+    await page.waitFor(3 * 1000)
+    await page.click('#J_QRCodeLogin > div.login-links > a.forget-pwd.J_Quick2Static')
+    await page.waitFor(3 * 1000)
     # 替换淘宝在检测浏览时采集的一些参数。
     # 就是在浏览器运行的时候，始终让window.navigator.webdriver=false
     # navigator是windiw对象的一个属性，同时修改plugins，languages，navigator 且让
@@ -20,12 +26,13 @@ async def main(username, pwd, url):  # 定义main协程函数，
         '''() =>{ Object.defineProperties(navigator,{ webdriver:{ get: () => false } }) }''')  # 以下为插入中间js，将淘宝会为了检测浏览器而调用的js修改其结果。
     await page.evaluate('''() =>{ window.navigator.chrome = { runtime: {},  }; }''')
     await page.evaluate('''() =>{ Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); }''')
-    await page.evaluate('''() =>{ Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5,6], }); }''')
+    await page.evaluate('''() =>{ Object.de
+    fineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5,6], }); }''')
 
     # 使用type选定页面元素，并修改其数值，用于输入账号密码，修改的速度仿人类操作，因为有个输入速度的检测机制
     # 因为 pyppeteer 框架需要转换为js操作，而js和python的类型定义不同，所以写法与参数要用字典，类型导入
-    await page.type('.J_UserName', username, {'delay': input_time_random() - 50})
-    await page.type('#J_StandardPwd input', pwd, {'delay': input_time_random()})
+    await page.type('#TPL_username_1', username, {'delay': input_time_random() - 50})
+    await page.type('#TPL_password_1', pwd, {'delay': input_time_random()})
 
     # await page.screenshot({'path': './headless-test-result.png'})    # 截图测试
     time.sleep(2)
@@ -120,6 +127,7 @@ def input_time_random():
 if __name__ == '__main__':
     username = '13357157455'  # 淘宝用户名
     pwd = 'lck980621'  # 密码
-    url = 'https://login.taobao.com/member/login.jhtml?style=mini&css_style=b2b&from=b2b&full_redirect=true&redirect_url=https://login.1688.com/member/jump.htm?target=https://login.1688.com/member/marketSigninJump.htm?Done=http://login.1688.com/member/taobaoSellerLoginDispatch.htm&reg= http://member.1688.com/member/join/enterprise_join.htm?lead=http://login.1688.com/member/taobaoSellerLoginDispatch.htm&leadUrl=http://login.1688.com/member/'
+    url = 'https://login.taobao.com'
     loop = asyncio.get_event_loop()  # 协程，开启个无限循环的程序流程，把一些函数注册到事件循环上。当满足事件发生的时候，调用相应的协程函数。
     loop.run_until_complete(main(username, pwd, url))  # 将协程注册到事件循环，并启动事件循环
+

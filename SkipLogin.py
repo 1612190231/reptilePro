@@ -9,6 +9,7 @@ async def main():
                            args=[f'--window-size={width},{height}'], dumpio=True)
     page = await browser.newPage()
     await page.setViewport({'width': width, 'height': height})
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0')
     await page.goto('https://www.taobao.com')
     # await page.goto('https://login.taobao.com/member/login.jhtml?redirectURL=https://www.taobao.com/')
     await page.evaluate('''() =>{ Object.defineProperties(navigator,{ webdriver:{ get: () => false } }) }''')

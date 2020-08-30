@@ -1,5 +1,6 @@
 import requests
 import re
+import pyppeteer
 
 
 def clipping(url):

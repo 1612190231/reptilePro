@@ -2,7 +2,8 @@ import xlrd
 import time
 import asyncio
 
-from reptilePro.utils import screenCaptureUtil, entryUtil
+# from reptilePro.utils import screenCaptureUtil, entryUtil
+from utils import screenCaptureUtil, entryUtil
 
 
 def main():

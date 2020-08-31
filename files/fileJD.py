@@ -1,8 +1,10 @@
-from reptilePro.reptiles import reptileJD
-from reptilePro.reptiles import reptileWeb
+# from reptilePro.reptiles import reptileJD
+# from reptilePro.reptiles import reptileWeb
 import time
 import tkinter.filedialog
 import random
+
+from reptiles import reptileJD
 
 
 def get_file(url, page):

@@ -1,26 +1,28 @@
-import requests
-import re
-import pyppeteer
+import time
+import asyncio
+from pyppeteer import launch
 
 
-def clipping(url):
-    res = requests.get(url)
-    res.encoding = 'utf-8'
-    print(res.text)
+async def clipping(url):
+    browser = await launch(args=['--no-sandbox', '--disable-setuid-sandbox'])
+    page = await browser.newPage()
+    await page.setViewport({'width': 1000, 'height': 1200})
+    # await page.goto('https://www.xiaohongshu.com/explore')
+    await page.goto(url)
+    # time.sleep(2)
 
-    pattern = re.compile(' -?[1-9]\\d*')
-    like = re.match(
-        '<span class="like" data-v-5e3e939c><i data-v-5e3e939c></i> <span data-v-5e3e939c>-?[1-9]\\d*</span></span>',
-        res.text)
-    star = re.match(
-        '<span class="star" data-v-5e3e939c><i data-v-5e3e939c></i> <span data-v-5e3e939c>-?[1-9]\\d*</span></span>',
-        res.text)
-    comment = re.match(
-        '<span class="comment" data-v-5e3e939c><i data-v-5e3e939c></i> <span data-v-5e3e939c>-?[1-9]\\d*</span></span>',
-        res.text)
-    print(like)
-    print(star)
-    print(comment)
+    dicts = {}
+    items_like = await page.xpath('//span[@class="like"]/span')
+    for item_like in items_like:
+        dicts['like'] = await(await item_like.getProperty('textContent')).jsonValue()
+    items_star = await page.xpath('//span[@class="star"]/span')
+    for item in items_star:
+        dicts['star'] = await(await item.getProperty('textContent')).jsonValue()
+    items_comment = await page.xpath('//span[@class="comment"]/span')
+    for item in items_comment:
+        dicts['comment'] = await(await item.getProperty('textContent')).jsonValue()
+
+    return dicts.values()
 
 
-clipping('https://www.xiaohongshu.com/discovery/item/5f33a8ff00000000010032de')
+asyncio.get_event_loop().run_until_complete(clipping('https://www.xiaohongshu.com/discovery/item/5f33a8ff00000000010032de'))

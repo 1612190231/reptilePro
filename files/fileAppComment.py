@@ -1,4 +1,4 @@
-from reptilePro.reptiles import reptileWeb
+# from reptilePro.reptiles import reptileWeb
 import time
 import tkinter.filedialog
 import random
